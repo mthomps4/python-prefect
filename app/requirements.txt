@@ -1,6 +1,7 @@
 fastapi>=0.95.0
 uvicorn>=0.21.0
-prefect>=2.10.0
+prefect>=3.4.3
+pydantic>=2.8.0,<3.0.0
 python-dotenv>=1.0.0
 sqlalchemy>=2.0.0
 # pyodbc>=4.0.35  # For MSSQL connections

@@ -40,7 +40,6 @@ services:
       - ./prefect/prefect.env
     volumes:
       - prefect_data:/root/.prefect
-      - ${PWD}/flows:/flows # Mount flows directory
     networks:
       - prefect-network
     depends_on:
