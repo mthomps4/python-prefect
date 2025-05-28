@@ -1,0 +1,10 @@
+FROM prefecthq/prefect:2-latest
+
+# Copy any custom configurations
+COPY prefect.env /root/.prefect/.env
+
+# Set the working directory
+WORKDIR /app
+
+# The command will be overridden by docker-compose
+CMD ["prefect", "agent", "start", "-q", "default"]

@@ -1,0 +1,66 @@
+# FOR LOCAL DEVELOPMENT ONLY
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      - PREFECT_API_URL=http://prefect-server:4200/api
+    volumes:
+      - ./app:/app
+    networks:
+      - prefect-network
+    depends_on:
+      - prefect-server
+
+  prefect-server:
+    build:
+      context: ./prefect
+      dockerfile: Dockerfile.server
+    ports:
+      - "4200:4200" # Prefect UI
+    env_file:
+      - ./prefect/prefect.env
+    volumes:
+      - prefect_data:/root/.prefect
+    networks:
+      - prefect-network
+    depends_on:
+      - postgres
+
+  prefect-agent:
+    build:
+      context: ./prefect
+      dockerfile: Dockerfile.agent
+    env_file:
+      - ./prefect/prefect.env
+    volumes:
+      - prefect_data:/root/.prefect
+      - ${PWD}/flows:/flows # Mount flows directory
+    networks:
+      - prefect-network
+    depends_on:
+      - prefect-server
+
+  postgres:
+    image: postgres:15
+    env_file:
+      - ./prefect/prefect.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - prefect-network
+    ports:
+      - "5432:5432"
+
+volumes:
+  prefect_data:
+  postgres_data:
+
+networks:
+  prefect-network:
+    driver: bridge
