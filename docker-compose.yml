@@ -2,14 +2,14 @@
 services:
   api:
     build:
-      context: ./app
+      context: ./api
       dockerfile: Dockerfile.fastapi
     ports:
       - "8000:8000"
     environment:
       - PREFECT_API_URL=http://prefect-server:4200/api
     volumes:
-      - ./app:/app
+      - ./api:/api
     networks:
       - prefect-network
     depends_on:
@@ -32,6 +32,10 @@ services:
 
   postgres:
     image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=prefect-spike
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:

@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 from prefect.client.orchestration import get_client
 from prefect.server.schemas.actions import WorkPoolCreate
 import time
@@ -13,7 +12,6 @@ async def ensure_default_work_pool():
                     work_pool=WorkPoolCreate(
                         name="default",
                         type="process",
-                        # type="prefect-agent",  # "prefect-agent" is the default type
                     )
                 )
                 print("Created default work pool.")
@@ -27,16 +25,16 @@ async def ensure_default_work_pool():
 
 def deploy_flows():
     try:
-        # TODO: This could potentially be moved to a YAML File
         # Import the flow using the correct path
         from flows.hello_world import hello_world
 
         # Serve (deploy) these flows when the app is running
+        # will upsert the deployment in the database
         hello_world.serve(
             tags=["hello-world", "default"],
             name="hello-world",
             version="1",
-        ) # will upsert the deployment in the database
+        )
 
         print("Successfully deployed hello-world flow")
         return True

@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY flows /app/flows
 
 # Copy the deployment script and startup script
-COPY deploy.py .
+COPY setup.py .
 COPY start.sh .
 RUN chmod +x start.sh
 

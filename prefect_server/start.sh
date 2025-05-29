@@ -11,8 +11,8 @@ done
 echo "Prefect server is ready!"
 
 # Deploy flows
-echo "Deploying flows..."
-python deploy.py
+echo "Setting up work pool and deploying flows..."
+python setup.py
 
 # Keep the container running
 tail -f /dev/null
