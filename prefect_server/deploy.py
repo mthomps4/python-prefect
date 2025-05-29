@@ -27,10 +27,11 @@ async def ensure_default_work_pool():
 
 def deploy_flows():
     try:
+        # TODO: This could potentially be moved to a YAML File
         # Import the flow using the correct path
         from flows.hello_world import hello_world
 
-        # Deploy the flow using the new API
+        # Serve (deploy) these flows when the app is running
         hello_world.serve(
             tags=["hello-world", "default"],
             name="hello-world",

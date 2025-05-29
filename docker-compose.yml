@@ -1,6 +1,4 @@
 # FOR LOCAL DEVELOPMENT ONLY
-version: "3.8"
-
 services:
   api:
     build:
@@ -19,12 +17,12 @@ services:
 
   prefect-server:
     build:
-      context: ./prefect
+      context: ./prefect_server
       dockerfile: Dockerfile.server
     ports:
       - "4200:4200" # Prefect UI
     env_file:
-      - ./prefect/prefect.env
+      - ./prefect_server/prefect.env
     volumes:
       - prefect_data:/root/.prefect
     networks:
@@ -32,23 +30,8 @@ services:
     depends_on:
       - postgres
 
-  prefect-agent:
-    build:
-      context: ./prefect
-      dockerfile: Dockerfile.agent
-    env_file:
-      - ./prefect/prefect.env
-    volumes:
-      - prefect_data:/root/.prefect
-    networks:
-      - prefect-network
-    depends_on:
-      - prefect-server
-
   postgres:
     image: postgres:15
-    env_file:
-      - ./prefect/prefect.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:

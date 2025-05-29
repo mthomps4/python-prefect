@@ -1,18 +1,16 @@
 from fastapi import APIRouter, HTTPException
 from prefect.client import get_client
 from pydantic import BaseModel
-from prefect.states import Scheduled
-
-try:
-    from prefect.client.schemas.responses import StateCreate
-    StateCreate.model_rebuild()
-except ImportError:
-    pass
+# This is needed to avoid the error:
+# https://github.com/PrefectHQ/prefect/issues/15591
+import prefect.main
 
 router = APIRouter()
 
 class HelloRequest(BaseModel):
     name: str | None = "World"
+
+HelloRequest.model_rebuild()
 
 @router.post("/")
 async def run_job(request: HelloRequest):
@@ -23,13 +21,17 @@ async def run_job(request: HelloRequest):
             if not deployment:
                 raise HTTPException(
                     status_code=404,
-                    detail="Deployment 'hello-world/hello-world' not ¬found"
+                    detail="Deployment 'hello-world/hello-world' not found"
                 )
 
             flow_run = await client.create_flow_run_from_deployment(
                 deployment_id=deployment.id,
-                parameters={"name": request.name},
+                name="asdf",
+                parameters={
+                    "name": request.name
+                },
             )
+
             return {
                 "status": "Job triggered",
                 "flow_run_id": flow_run.id
