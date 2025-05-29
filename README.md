@@ -25,6 +25,7 @@
 
 ## Layout
 
+```sh
 your_project/
 ├── api/
 │   ├── main.py          # FastAPI entry point
@@ -38,6 +39,7 @@ your_project/
 │   └── prefect.env       # Environment config
 ├── docker-compose.yml    # All services (FastAPI, Prefect, Postgres)
 └── README.md
+```
 
 ## Installation
 
